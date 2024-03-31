@@ -1,4 +1,4 @@
-import { isEscape, showAlert } from './utilise.js';
+import { isEscape } from './utilise.js';
 import { updateScale, addEventScale } from './scale-foto.js';
 import { changeEffect, updateChangeEffect } from './effects-foto.js';
 import { validateCommentLength, isHashtagNotOneSymbol, isHashtagTrueAmount, isHashtagTrueLength, isHashtagTrueStart, isHashtagTrueSymbols, isHashtagUnique } from './validation-data.js';
@@ -12,6 +12,9 @@ const closeButton = document.querySelector('#upload-cancel');
 const userHashtag = document.querySelector('.text__hashtags');
 const userComment = document.querySelector('.text__description');
 const submitButton = document.querySelector('.img-upload__submit');
+
+const templateError = document.querySelector('#error');
+const templateSuccess = document.querySelector('#success');
 
 const pristine = new Pristine(formElement, {
   classTo: 'img-upload__field-wrapper',
@@ -76,9 +79,11 @@ const closeUploadModal = () => {
   imgOverlay.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   pristine.reset();
-  inputFile.value = null;
+  formElement.value = null;
   updateScale();
   updateChangeEffect();
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
@@ -89,11 +94,12 @@ function onDocumentKeydown (evt) {
   }
 }
 
+const isValid = () => pristine.validate();
+
+
 function blockButton () {
 
-  const isValid = pristine.validate();
-
-  if (!isValid) {
+  if (!isValid()) {
     submitButton.disabled = true;
     const errorsElements = document.querySelectorAll('.form__error');
     errorsElements.forEach((element) => {
@@ -104,22 +110,84 @@ function blockButton () {
   }
 }
 
+const hideSuccessMessage = () => {
+  const successSection = document.querySelector('.success');
+  successSection.remove();
+  document.removeEventListener('keydown', onClickEscapeInSucces);
+  document.removeEventListener('click', onClickOutspace);
+};
 
-function sendForm (onSuccess) {
-  const isValid = pristine.validate();
-  submitButton.addEventListener('submit', (evt) => {
+const showSuccessMessage = () => {
+  const successClone = templateSuccess.content.cloneNode(true);
+  const successMessage = successClone.querySelector('.success__title');
+  successMessage.textContent = 'Кекс успешно загрузил вашу фотографию';
+  successMessage.style.fontSize = '25px';
+  document.body.appendChild(successClone);
+  const closeButtonSuccess = document.querySelector('.success__button');
+  closeButtonSuccess.addEventListener('click', hideSuccessMessage);
+  document.addEventListener('keydown', onClickEscapeInSucces);
+  document.addEventListener('click', onClickOutspace);
+  formElement.reset();
+};
+
+const hideErrorMessage = () => {
+  const errorSection = document.querySelector('.error');
+  errorSection.remove();
+  document.removeEventListener('keydown', onClickEscapeInError);
+  document.removeEventListener('click', onClickOutspace);
+};
+
+const showErrorMessage = () => {
+  const errorClone = templateError.content.cloneNode(true);
+  const errorMessage = errorClone.querySelector('.error__title');
+  errorMessage.textContent = 'Ошибка! Кекс не получил вашу фотографию';
+  errorMessage.style.fontSize = '25px';
+  document.body.appendChild(errorClone);
+  const closeButtonError = document.querySelector('.error__button');
+  closeButtonError.addEventListener('click', hideErrorMessage);
+  document.addEventListener('keydown', onClickEscapeInError);
+  document.addEventListener('click', onClickOutspace);
+  document.removeEventListener('keydown', onDocumentKeydown);
+};
+
+function onClickOutspace (event) {
+  const messageSuccessBlock = document.querySelector('.success__inner');
+  const messageErrorBlock = document.querySelector('.error__inner');
+  if (messageSuccessBlock && !messageSuccessBlock.contains(event.target)) {
+    hideSuccessMessage();
+  } else if (messageErrorBlock && !messageErrorBlock.contains(event.target)){
+    hideErrorMessage();
+  }
+}
+
+function onClickEscapeInSucces(evt) {
+  if (isEscape(evt)) {
+    hideSuccessMessage();
+  }
+}
+
+function onClickEscapeInError(evt) {
+  if (isEscape(evt)) {
+    hideErrorMessage();
+  }
+}
+
+function sendForm () {
+  formElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    if (isValid) {
+    if (isValid()) {
       submitButton.disabled = true;
-      submitButton.textContent = 'в процессе...';
+      submitButton.textContent = 'В процессе...';
       sendData(new FormData(formElement))
-        .then(onSuccess)
-        .catch(
-          (err) => {
-            showAlert(err.message);
-          }
-        )
-        .finally(submitButton.disabled = false);
+        .then(() => {
+          showSuccessMessage();
+          closeUploadModal();
+        })
+        .catch(() => {
+          showErrorMessage();
+          submitButton.disabled = false;
+          submitButton.textContent = 'Попробовать еще раз';
+        });
     }
   });
 }
@@ -127,5 +195,6 @@ function sendForm (onSuccess) {
 formElement.addEventListener('input', blockButton);
 inputFile.addEventListener('change', openUploadModal);
 closeButton.addEventListener('click', closeUploadModal);
+
 
 export { sendForm, closeUploadModal };

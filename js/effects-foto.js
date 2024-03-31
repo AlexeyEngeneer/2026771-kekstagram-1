@@ -7,7 +7,8 @@ const sliderElement = document.querySelector('.effect-level__slider');
 const updateChangeEffect = () => {
   previewFoto.className = '';
   previewFoto.style.filter = 'none';
-
+  sliderConteiner.classList.remove('hidden');
+  // document.querySelector('.effects__radio:checked').value = 'none';
 };
 
 noUiSlider.create(sliderElement, {
@@ -55,7 +56,7 @@ const changeEffect = () => {
     element.addEventListener('change', (evt) => {
       if (evt.target.checked) {
         previewFoto.className = `effects__preview--${element.value}`;
-        updateChangeEffect();
+        // updateChangeEffect();
         if (element.value === 'none') {
           sliderConteiner.classList.add('hidden');
         } else if (element.value === 'chrome') {

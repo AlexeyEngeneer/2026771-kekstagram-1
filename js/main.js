@@ -1,10 +1,10 @@
 import { selectingFullscreenFoto } from './gallery.js';
-import './form-upload.js';
 import './scale-foto.js';
 import './effects-foto.js';
 import {getData } from './server-manager.js';
-import {showAlert} from './utilise.js';
-import { sendForm, closeUploadModal } from './form-upload.js';
+import {showAlert } from './utilise.js';
+import { sendForm } from './form-upload.js';
+import './form-upload.js';
 
 getData()
   .then((picturesData) => {
@@ -16,4 +16,4 @@ getData()
     }
   );
 
-sendForm(closeUploadModal);
+sendForm();
