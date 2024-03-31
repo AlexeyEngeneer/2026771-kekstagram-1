@@ -1,5 +1,3 @@
-import { isMinus, isPlus } from './utilise.js';
-
 const MAX_SCALE = 100;
 const MIN_SCALE = 25;
 const SCALE_STEP = 25;
@@ -9,16 +7,6 @@ const inputSizeElement = document.querySelector('.scale__control--value');
 const sizeFoto = document.querySelector('.img-upload__preview');
 
 let scaleValue = MAX_SCALE;
-
-function onScaleKeydown (evt) {
-  if (isPlus(evt) && scaleValue < MAX_SCALE) {
-    evt.preventDefault();
-    increaseScale();
-  } else if (isMinus(evt) && scaleValue > MIN_SCALE) {
-    evt.preventDefault();
-    decreaseScale();
-  }
-}
 
 const updateScale = () => {
   inputSizeElement.value = '';
@@ -54,13 +42,11 @@ function addEventScale () {
   sizeFoto.style.transform = `scale(${MAX_SCALE / 100})`;
   buttonBigger.addEventListener('click', increaseScale);
   buttonSmaller.addEventListener('click', decreaseScale);
-  document.addEventListener('keydown', onScaleKeydown);
 }
 
 function removeEvent () {
   buttonBigger.removeEventListener('click', increaseScale);
   buttonSmaller.removeEventListener('click', decreaseScale);
-  document.removeEventListener('keydown', onScaleKeydown);
 }
 
 export { updateScale, addEventScale };
