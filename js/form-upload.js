@@ -115,12 +115,12 @@ const hideSuccessMessage = () => {
   successSection.remove();
   document.removeEventListener('keydown', onClickEscapeInSucces);
   document.removeEventListener('click', onClickOutspace);
+  formElement.removeEventListener('input', blockButton);
 };
 
 const showSuccessMessage = () => {
   const successClone = templateSuccess.content.cloneNode(true);
   const successMessage = successClone.querySelector('.success__title');
-  successMessage.textContent = 'Кекс успешно загрузил вашу фотографию';
   successMessage.style.fontSize = '25px';
   document.body.appendChild(successClone);
   const closeButtonSuccess = document.querySelector('.success__button');
@@ -140,7 +140,6 @@ const hideErrorMessage = () => {
 const showErrorMessage = () => {
   const errorClone = templateError.content.cloneNode(true);
   const errorMessage = errorClone.querySelector('.error__title');
-  errorMessage.textContent = 'Ошибка! Кекс не получил вашу фотографию';
   errorMessage.style.fontSize = '25px';
   document.body.appendChild(errorClone);
   const closeButtonError = document.querySelector('.error__button');

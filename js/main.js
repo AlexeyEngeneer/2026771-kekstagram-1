@@ -5,10 +5,18 @@ import {getData } from './server-manager.js';
 import {showAlert } from './utilise.js';
 import { sendForm } from './form-upload.js';
 import './form-upload.js';
+import { defaultDebounce, discussedDebounce, randomDebounce } from './debounce.js';
+import'./debounce.js';
+
+const filter = document.querySelector('.img-filters');
 
 getData()
   .then((picturesData) => {
     selectingFullscreenFoto(picturesData);
+    defaultDebounce(picturesData);
+    discussedDebounce(picturesData);
+    randomDebounce(picturesData);
+    filter.classList.remove('img-filters--inactive');
   })
   .catch(
     (err) => {

@@ -1,21 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
 
-const getRandomNumber = (a, b) => {
-  const minValue = Math.ceil(Math.min(a, b));
-  const maxValue = Math.floor(Math.max(a, b));
-  const result = Math.random() * (maxValue - minValue + 1) + minValue;
-  return Math.floor(result);
-};
-
-const getArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
-
-const createCounter = () =>{
-  let currentCount = 1;
-  return function() {
-    return currentCount++;
-  };
-};
-
 const isEscape = (evt) => evt.key === 'Escape';
 
 const showAlert = (message) => {
@@ -41,4 +25,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export { getRandomNumber, getArrayElement, createCounter, isEscape, showAlert };
+export { isEscape, showAlert };
