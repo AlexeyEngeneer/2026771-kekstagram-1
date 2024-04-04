@@ -68,14 +68,15 @@ pristine.addValidator(
 );
 
 const openUploadModal = () => {
+  addEventUploadForm();
   imgOverlay.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
   addEventScale();
   changeEffect();
-  document.addEventListener('keydown', onDocumentKeydown);
 };
 
 const closeUploadModal = () => {
+  removeEventUploadForm();
   imgOverlay.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   pristine.reset();
@@ -84,7 +85,6 @@ const closeUploadModal = () => {
   updateChangeEffect();
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
-  document.removeEventListener('keydown', onDocumentKeydown);
 };
 
 function onDocumentKeydown (evt) {
@@ -133,6 +133,8 @@ const showSuccessMessage = () => {
 const hideErrorMessage = () => {
   const errorSection = document.querySelector('.error');
   errorSection.remove();
+  const closeButtonError = document.querySelector('.error__button');
+  closeButtonError.removeEventListener('click', hideErrorMessage);
   document.removeEventListener('keydown', onClickEscapeInError);
   document.removeEventListener('click', onClickOutspace);
 };
@@ -191,9 +193,18 @@ function sendForm () {
   });
 }
 
-formElement.addEventListener('input', blockButton);
-inputFile.addEventListener('change', openUploadModal);
-closeButton.addEventListener('click', closeUploadModal);
+function removeEventUploadForm () {
+  formElement.removeEventListener('input', blockButton);
+  closeButton.removeEventListener('click', closeUploadModal);
+  document.removeEventListener('keydown', onDocumentKeydown);
+}
 
+function addEventUploadForm () {
+  formElement.addEventListener('input', blockButton);
+  closeButton.addEventListener('click', closeUploadModal);
+  document.addEventListener('keydown', onDocumentKeydown);
+}
+
+inputFile.addEventListener('change', openUploadModal);
 
 export { sendForm, closeUploadModal };
