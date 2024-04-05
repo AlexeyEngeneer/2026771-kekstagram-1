@@ -7,6 +7,7 @@ import { sendForm } from './form-upload.js';
 import './form-upload.js';
 import { defaultDebounce, discussedDebounce, randomDebounce } from './debounce.js';
 import'./debounce.js';
+import './file-manager.js';
 
 const filter = document.querySelector('.img-filters');
 
