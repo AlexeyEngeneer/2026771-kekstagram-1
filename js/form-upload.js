@@ -1,6 +1,6 @@
 import { isEscape } from './utilise.js';
 import { updateScale, addEventScale } from './scale-foto.js';
-import { changeEffect, updateChangeEffect } from './effects-foto.js';
+import { changeEffect, updateChangeEffect, removeEventChangeEffect } from './effects-foto.js';
 import { validateCommentLength, isHashtagNotOneSymbol, isHashtagTrueAmount, isHashtagTrueLength, isHashtagTrueStart, isHashtagTrueSymbols, isHashtagUnique } from './validation-data.js';
 import { sendData } from './server-manager.js';
 
@@ -12,6 +12,8 @@ const closeButton = document.querySelector('#upload-cancel');
 const userHashtag = document.querySelector('.text__hashtags');
 const userComment = document.querySelector('.text__description');
 const submitButton = document.querySelector('.img-upload__submit');
+const imgPreview = document.querySelector('.img-upload__preview img');
+const fileChooser = document.querySelector('.img-upload__start input[type=file]');
 
 const templateError = document.querySelector('#error');
 const templateSuccess = document.querySelector('#success');
@@ -85,6 +87,8 @@ const closeUploadModal = () => {
   updateChangeEffect();
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
+  imgPreview.src = 'img/upload-default-image.jpg';
+  fileChooser.value = '';
 };
 
 function onDocumentKeydown (evt) {
@@ -194,6 +198,7 @@ function sendForm () {
 }
 
 function removeEventUploadForm () {
+  removeEventChangeEffect();
   formElement.removeEventListener('input', blockButton);
   closeButton.removeEventListener('click', closeUploadModal);
   document.removeEventListener('keydown', onDocumentKeydown);

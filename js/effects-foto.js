@@ -5,10 +5,83 @@ const sliderConteiner = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 
 const updateChangeEffect = () => {
-  previewFoto.className = '';
-  previewFoto.style.filter = 'none';
-  sliderConteiner.classList.remove('hidden');
-  // document.querySelector('.effects__radio:checked').value = 'none';
+  previewFoto.style = '';
+  previewFoto.className = 'img-upload__preview';
+};
+
+const changeEffectFunction = (evt) => {
+  if (evt.target.checked) {
+    previewFoto.className = (`img-upload__preview effects__preview--${evt.target.value}`);
+    if (evt.target.value === 'none') {
+      sliderConteiner.classList.add('hidden');
+      updateChangeEffect();
+    } else if (evt.target.value === 'chrome') {
+      sliderConteiner.classList.remove('hidden');
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 0,
+          max: 1,
+        },
+        start: 1,
+        step: 0.1
+      });
+    } else if (evt.target.value === 'sepia') {
+      sliderConteiner.classList.remove('hidden');
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 0,
+          max: 1,
+        },
+        start: 1,
+        step: 0.1
+      });
+    } else if (evt.target.value === 'marvin') {
+      sliderConteiner.classList.remove('hidden');
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 0,
+          max: 100,
+        },
+        start: 100,
+        step: 1
+      });
+    } else if (evt.target.value === 'phobos') {
+      sliderConteiner.classList.remove('hidden');
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 0,
+          max: 3,
+        },
+        start: 3,
+        step: 0.1
+      });
+    } else if (evt.target.value === 'heat') {
+      sliderConteiner.classList.remove('hidden');
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 1,
+          max: 3,
+        },
+        start: 3,
+        step: 0.1
+      });
+    }
+  }
+};
+
+const changeEffect = () => {
+  sliderConteiner.classList.add('hidden');
+  changeEffectElement.forEach((element) => {
+
+    element.addEventListener('change', changeEffectFunction);
+  });
+};
+
+
+const removeEventChangeEffect = () => {
+  changeEffectElement.forEach((element) => {
+    element.removeEventListener('change', changeEffectFunction);
+  });
 };
 
 noUiSlider.create(sliderElement, {
@@ -27,6 +100,7 @@ sliderElement.noUiSlider.on('update', (values) => {
 
   const selectedEffect = document.querySelector('.effects__radio:checked').value;
   switch (selectedEffect) {
+
     case 'chrome':
       previewFoto.style.filter = `grayscale(${sliderValue})`;
       break;
@@ -42,79 +116,9 @@ sliderElement.noUiSlider.on('update', (values) => {
     case 'heat':
       previewFoto.style.filter = `brightness(${sliderValue})`;
       break;
-    case 'none':
-    default:
-      updateChangeEffect();
-      break;
   }
   deepEffect.value = sliderValue;
 });
 
-const changeEffect = () => {
-  sliderConteiner.classList.add('hidden');
-  changeEffectElement.forEach((element) => {
-    element.addEventListener('change', (evt) => {
-      if (evt.target.checked) {
-        previewFoto.className = `effects__preview--${element.value}`;
-        // updateChangeEffect();
-        if (element.value === 'none') {
-          sliderConteiner.classList.add('hidden');
-        } else if (element.value === 'chrome') {
-          sliderConteiner.classList.remove('hidden');
-          sliderElement.noUiSlider.updateOptions({
-            range: {
-              min: 0,
-              max: 1,
-            },
-            start: 1,
-            step: 0.1
-          });
-        } else if (element.value === 'sepia') {
-          sliderConteiner.classList.remove('hidden');
-          sliderElement.noUiSlider.updateOptions({
-            range: {
-              min: 0,
-              max: 1,
-            },
-            start: 1,
-            step: 0.1
-          });
-        } else if (element.value === 'marvin') {
-          sliderConteiner.classList.remove('hidden');
-          sliderElement.noUiSlider.updateOptions({
-            range: {
-              min: 0,
-              max: 100,
-            },
-            start: 100,
-            step: 1
-          });
-        } else if (element.value === 'phobos') {
-          sliderConteiner.classList.remove('hidden');
-          sliderElement.noUiSlider.updateOptions({
-            range: {
-              min: 0,
-              max: 3,
-            },
-            start: 3,
-            step: 0.1
-          });
-        } else if (element.value === 'heat') {
-          sliderConteiner.classList.remove('hidden');
-          sliderElement.noUiSlider.updateOptions({
-            range: {
-              min: 1,
-              max: 3,
-            },
-            start: 3,
-            step: 0.1
-          });
-        }
-      }
-    });
-  });
-};
-
-
-export{ changeEffect, updateChangeEffect };
+export { changeEffect, updateChangeEffect, removeEventChangeEffect };
 

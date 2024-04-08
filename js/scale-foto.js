@@ -10,7 +10,7 @@ let scaleValue = MAX_SCALE;
 
 const updateScale = () => {
   inputSizeElement.value = '';
-  sizeFoto.style.transform = '';
+  sizeFoto.style.transform = 'scale(1)';
   scaleValue = MAX_SCALE;
   buttonBigger.disabled = false;
   buttonSmaller.disabled = false;

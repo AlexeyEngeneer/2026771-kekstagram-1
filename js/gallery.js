@@ -7,9 +7,8 @@ let handleClick;
 
 const selectingFullscreenFoto = (createdData) => {
 
-  removeEventFullscreenFoto();
-
   handleClick = (evt) => {
+
     const targetPicture = evt.target.closest('[data-new-template-id]');
     if (targetPicture){
       evt.preventDefault();
@@ -20,13 +19,12 @@ const selectingFullscreenFoto = (createdData) => {
     }
   };
 
-  fullscreenFotoBlock.addEventListener('click', handleClick);
-
   createArrayFotoCards(createdData);
+
 };
 
-function removeEventFullscreenFoto () {
-  fullscreenFotoBlock.removeEventListener('click', handleClick);
+function addEventFullscreenFoto () {
+  fullscreenFotoBlock.addEventListener('click', handleClick);
 }
 
-export { selectingFullscreenFoto };
+export { selectingFullscreenFoto, addEventFullscreenFoto };

@@ -67,27 +67,23 @@ buttonCommentsLoader.addEventListener('click', () => {
   getPortionComments();
 });
 
-const closeUserModal = () => {
+const closeFullscreenModal = () => {
   fullscreenFoto.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
+  closeButton.removeEventListener('click', closeFullscreenModal);
   commentPortion = 5;
   startIndx = 0;
   buttonCommentsLoader.disabled = false;
   buttonCommentsLoader.textContent = 'Загрузить еще';
-  buttonCommentsLoader.style.color = '';
 };
 
 function onDocumentKeydown (evt) {
   if (isEscape(evt)) {
     evt.preventDefault();
-    closeUserModal();
+    closeFullscreenModal();
   }
 }
-
-closeButton.addEventListener('click', () => {
-  closeUserModal();
-});
 
 const createFullscreenFotoData = ({url, likes, description}) => {
   addresFoto.src = url;
@@ -101,6 +97,7 @@ const createFullscreenFoto = (findedFotoData) => {
   bodyElement.classList.add('modal-open');
   createFullscreenFotoData(findedFotoData);
   document.addEventListener('keydown', onDocumentKeydown);
+  closeButton.addEventListener('click', closeFullscreenModal);
   counterComments.classList.remove('hidden');
   buttonCommentsLoader.classList.remove('hidden');
   createFullscreenComments(findedFotoData.comments);
@@ -108,4 +105,3 @@ const createFullscreenFoto = (findedFotoData) => {
 };
 
 export { createFullscreenFoto };
-
