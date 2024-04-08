@@ -4,16 +4,16 @@ import { changeEffect, updateChangeEffect, removeEventChangeEffect } from './eff
 import { validateCommentLength, isHashtagNotOneSymbol, isHashtagTrueAmount, isHashtagTrueLength, isHashtagTrueStart, isHashtagTrueSymbols, isHashtagUnique } from './validation-data.js';
 import { sendData } from './server-manager.js';
 
-const inputFile = document.querySelector('#upload-file');
 const bodyElement = document.querySelector('body');
-const formElement = document.querySelector('.img-upload__form');
-const imgOverlay = document.querySelector('.img-upload__overlay');
-const closeButton = document.querySelector('#upload-cancel');
-const userHashtag = document.querySelector('.text__hashtags');
-const userComment = document.querySelector('.text__description');
-const submitButton = document.querySelector('.img-upload__submit');
-const imgPreview = document.querySelector('.img-upload__preview img');
-const fileChooser = document.querySelector('.img-upload__start input[type=file]');
+const formElement = bodyElement.querySelector('.img-upload__form');
+const inputFile = formElement.querySelector('#upload-file');
+const imgOverlay = formElement.querySelector('.img-upload__overlay');
+const closeButton = formElement.querySelector('#upload-cancel');
+const userHashtag = imgOverlay.querySelector('.text__hashtags');
+const userComment = imgOverlay.querySelector('.text__description');
+const submitButton = imgOverlay.querySelector('.img-upload__submit');
+const imgPreview = imgOverlay.querySelector('.img-upload__preview img');
+const fileChooser = formElement.querySelector('.img-upload__start input[type=file]');
 
 const templateError = document.querySelector('#error');
 const templateSuccess = document.querySelector('#success');
@@ -136,11 +136,12 @@ const showSuccessMessage = () => {
 
 const hideErrorMessage = () => {
   const errorSection = document.querySelector('.error');
-  errorSection.remove();
   const closeButtonError = document.querySelector('.error__button');
-  closeButtonError.removeEventListener('click', hideErrorMessage);
+  errorSection.remove();
+  document.addEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('keydown', onClickEscapeInError);
   document.removeEventListener('click', onClickOutspace);
+  closeButtonError.removeEventListener('click', hideErrorMessage);
 };
 
 const showErrorMessage = () => {
@@ -173,6 +174,7 @@ function onClickEscapeInSucces(evt) {
 
 function onClickEscapeInError(evt) {
   if (isEscape(evt)) {
+    evt.preventDefault();
     hideErrorMessage();
   }
 }

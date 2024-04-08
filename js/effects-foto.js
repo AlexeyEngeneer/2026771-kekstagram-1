@@ -1,8 +1,8 @@
 const changeEffectElement = document.querySelectorAll('.effects__radio');
 const previewFoto = document.querySelector('.img-upload__preview');
-const deepEffect = document.querySelector('.effect-level__value');
 const sliderConteiner = document.querySelector('.img-upload__effect-level');
-const sliderElement = document.querySelector('.effect-level__slider');
+const deepEffect = sliderConteiner.querySelector('.effect-level__value');
+const sliderElement = sliderConteiner.querySelector('.effect-level__slider');
 
 const updateChangeEffect = () => {
   previewFoto.style = '';

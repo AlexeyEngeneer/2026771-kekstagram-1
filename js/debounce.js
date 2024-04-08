@@ -1,10 +1,12 @@
 import { setFilterRandom, setFilterDefault, setFilterDiscussed } from './filters.js';
 
+const VALUE_TIMEOUT = 500;
 const filterDefault = document.querySelector('#filter-default');
 const filterRandom = document.querySelector('#filter-random');
 const filterDiscussed = document.querySelector('#filter-discussed');
 
-function debounce(callback, timeoutDelay = 500) {
+
+function debounce(callback, timeoutDelay) {
   let timeoutId;
 
   return (...args) => {
@@ -17,7 +19,7 @@ function debounce(callback, timeoutDelay = 500) {
 
 const handleFilterChange = debounce((filterFunction, picturesData) => {
   filterFunction(picturesData);
-}, 500);
+}, VALUE_TIMEOUT);
 
 const defaultDebounce = (picturesData) => {
   filterDefault.addEventListener('click', () => {
